@@ -718,5 +718,74 @@ and Edible Offal</strong>
       alert("Submitted! (Demo) Integrate with Google Apps Script or backend to store responses.");
     });
   </script>
+<script>
+  document.querySelector("#submitAll").addEventListener("click", () => {
+    // Collect Importer fields
+    const importer = {
+      impCompany: document.querySelector("#impCompany").value,
+      impAddr1: document.querySelector("#impAddr1").value,
+      impAddr2: document.querySelector("#impAddr2").value,
+      impEmail: document.querySelector("#impEmail").value,
+      impPhone: document.querySelector("#impPhone").value
+    };
+
+    // Collect Exporter fields
+    const exporter = {
+      expCompany: document.querySelector("#expCompany").value,
+      expAddr1: document.querySelector("#expAddr1").value,
+      expAddr2: document.querySelector("#expAddr2").value,
+      expEmail: document.querySelector("#expEmail").value,
+      expPhone: document.querySelector("#expPhone").value,
+      expWhatsApp: document.querySelector("#expWhatsApp").value
+    };
+
+    // Collect Transshipment fields
+    const transshipment = {
+      embarkation: document.querySelector("#embarkation").value,
+      disembarkation: document.querySelector("#disembarkation").value,
+      exportDate: document.querySelector("#exportDate").value,
+      arrivalDate: document.querySelector("#arrivalDate").value,
+      mode: document.querySelector("#mode").value,
+      transportNumber: document.querySelector("#transportNumber").value,
+      route: document.querySelector("#route").value,
+      processing: document.querySelector("#processing").value
+    };
+
+    // Collect Meat Products table rows
+    const meatProducts = [];
+    document.querySelectorAll("#meatTable tbody tr").forEach(tr => {
+      meatProducts.push({
+        meatType: tr.querySelector('select[name="meatType"]').value,
+        productName: tr.querySelector('input[name="productName"]').value,
+        productDesc: tr.querySelector('input[name="productDesc"]').value,
+        unitWeight: tr.querySelector('input[name="unitWeight"]').value,
+        unitType: tr.querySelector('select[name="unitType"]')?.value || "kg",
+        qty: tr.querySelector('input[name="qty"]').value,
+        totalWeight: tr.querySelector(".total-weight").textContent
+      });
+    });
+
+    // Build payload
+    const payload = { importer, exporter, transshipment, meatProducts };
+
+    // Send to Apps Script Web App
+    fetch("YOUR_WEB_APP_URL_HERE", {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: { "Content-Type": "application/json" }
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.result === "success") {
+        alert("Form submitted successfully!");
+      } else {
+        alert("Error: " + data.error);
+      }
+    })
+    .catch(err => alert("Network error: " + err));
+  });
+</script>
+  
 </body>
+
 </html>
