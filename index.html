@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Importer/Exporter Workflow Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0f1220;
+      --panel: #181b2e;
+      --text: #e8ebf7;
+      --muted: #a8afc9;
+      --accent: #61dafb;
+      --accent-2: #9ef797;
+      --danger: #ff6b6b;
+      --border: #2c3050;
+      --input: #1f2340;
+    }
+    * { box-sizing: border-box }
+    html, body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      line-height: 1.5;
+    }
+    header {
+      position: sticky; top: 0; z-index: 20;
+      backdrop-filter: blur(8px);
+      background: linear-gradient(180deg, rgba(15,18,32,0.9), rgba(15,18,32,0.7));
+      border-bottom: 1px solid var(--border);
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 16px }
+    nav { display: flex; gap: 12px; flex-wrap: wrap }
+    nav a {
+      color: var(--text); text-decoration: none; padding: 8px 12px;
+      border: 1px solid var(--border); border-radius: 8px;
+    }
+    nav a:hover { border-color: var(--accent); color: var(--accent) }
+
+    h2 { margin: 24px 0 8px }
+    h3 { margin: 20px 0 8px; color: var(--muted) }
+
+    section {
+      margin: 24px 0; padding: 16px;
+      background: var(--panel); border: 1px solid var(--border); border-radius: 16px;
+    }
+
+    .grid-2 {
+      display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px;
+    }
+    .grid-3 { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px }
+
+    label { display: block; font-weight: 600; margin-bottom: 6px }
+    .hint { color: var(--muted); font-size: 0.9rem }
+
+    input, select, textarea {
+      width: 100%; padding: 10px 12px;
+      background: var(--input); color: var(--text);
+      border: 1px solid var(--border); border-radius: 10px;
+      outline: none;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--accent) }
+
+    .row { display: flex; gap: 10px; align-items: center }
+    .pill {
+      padding: 6px 10px; border: 1px solid var(--border); border-radius: 999px;
+      color: var(--muted);
+    }
+
+    .btn {
+      padding: 10px 14px; border-radius: 12px; border: 1px solid var(--border);
+      background: #22264a; color: var(--text); cursor: pointer;
+    }
+    .btn:hover { border-color: var(--accent); color: var(--accent) }
+    .btn-primary { background: #263b58; border-color: #284b75 }
+    .btn-success { background: #214b2e; border-color: #2f7a49 }
+    .btn-danger { background: #4b2121; border-color: #7a2f2f; color: #ffb3b3 }
+    .btn-ghost { background: transparent }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 12px }
+    th, td { border-bottom: 1px solid var(--border); padding: 10px; text-align: left }
+    th { color: var(--muted); font-weight: 700 }
+    tfoot td { font-weight: 700 }
+
+    .tabs { display: flex; gap: 8px; margin: 12px 0 }
+    .tab {
+      padding: 8px 12px; border: 1px solid var(--border); border-radius: 999px;
+      cursor: pointer; color: var(--muted)
+    }
+    .tab.active { color: var(--text); border-color: var(--accent); background: #202545 }
+
+    .badge { padding: 4px 8px; border-radius: 999px; font-size: 0.85rem }
+    .badge-ok { background: #183f2a; color: var(--accent-2); border: 1px solid #2f7a49 }
+    .badge-warn { background: #3f1c1c; color: #ffb1b1; border: 1px solid #7a2f2f }
+
+    .split { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px }
+    @media (max-width: 900px) {
+      .grid-2, .grid-3, .split { grid-template-columns: 1fr }
+      nav { overflow-x: auto }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="row" style="justify-content: space-between;">
+        <div class="row" style="gap: 12px;">
+          <strong>Application for the permit to Import Meat, Meat Products
+and Edible Offal</strong>
+          <span class="pill">Fill all the details</span>
+        </div>
+        <div class="row">
+          <span class="badge badge-ok">DAPH</span>
+        </div>
+      </div>
+      <nav style="margin-top: 10px;">
+        <a href="#importer">Importer details</a>
+        <a href="#exporter">Exporter details</a>
+        <a href="#properties">Origin details</a>
+        <a href="#work">Transshipment Details</a>
+        <a href="#ids">Meat products details</a>
+        <a href="#summary">Summary & submit</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- 1. Importer Details -->
+    <section id="importer">
+      <h2>Importer details</h2>
+      <div class="grid-2">
+        <div>
+          <label for="impCompany">Company name (Imp) </label>
+          <input id="impCompany" name="impCompany" required placeholder="e.g., Browns PLC" />
+        
+        </div>
+        <div>
+          <label for="impAddr1">Address line 1 (Imp)</label>
+          <input id="impAddr1" name="impAddr1" placeholder="Street / Building" />
+        </div>
+        <div>
+          <label for="impAddr2">Address line 2 (Imp)</label>
+          <input id="impAddr2" name="impAddr2" placeholder="City / Region" />
+        </div>
+
+<div>
+          <label for="impPostalcode">Postal Code (Imp)</label>
+          <input id="impPostalcode" name="impPostalcode" placeholder="Postal code" />
+        </div>
+
+        <div>
+          <label for="impEmail">Email ID (Imp)</label>
+          <input id="impEmail" name="impEmail" type="email" placeholder="name@company.com" />
+</div>
+        <div>
+          <label for="impPhone">WhatsApp no  (Comp3)</label>
+          <input id="impPhone" name="impPhone" placeholder="+94 77 123 4567" pattern="^(\+?\d[\d\s\-]{6,})$" />
+          <div class="hint">Accepts country code, spaces, and dashes.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Exporter Details -->
+    <section id="exporter">
+      <h2>Exporter details</h2>
+      <div class="grid-2">
+        <div>
+          <label for="expCompany">Company name (Exp)</label>
+          <input id="expCompany" name="expCompany" required placeholder="e.g., AgStar PLC" />
+                </div>
+        <div>
+          <label for="expAddr1">Address line 1 (Exp)</label>
+          <input id="expAddr1" name="expAddr1" placeholder="Street / Building" />
+        </div>
+        <div>
+          <label for="expAddr2">Address line 2 (Exp)</label>
+          <input id="expAddr2" name="expAddr2" placeholder="City / Region" />
+        </div>
+
+<div>
+          <label for="expPostalcode">Postal Code (Exp)</label>
+          <input id="expPostalcode" name="expPostalcode" placeholder="Postalcode" />
+        </div>
+
+        <div>
+          <label for="expEmail">Email ID (Exp)</label>
+          <input id="expEmail" name="expEmail" type="email" placeholder="name@company.com" />
+        </div>
+        <div>
+          <label for="expWhatsApp">WhatsApp no (Exp)</label>
+          <input id="expWhatsApp" name="expWhatsApp" placeholder="+49 160 123 4567" pattern="^(\+?\d[\d\s\-]{6,})$" />
+          <div class="hint">Optional; leave empty if not provided.</div>
+        </div>
+      </div>
+    </section>
+
+   <!-- 2. Origin Details -->
+    <section id="origin">
+      <h2>Origin details</h2>
+      <div class="grid-2">
+        <div>
+          <label for="originCountry">Country of origin (Ori)</label>
+          <input id="originCountry" name="originCountry" required placeholder="e.g., Australia" />
+                </div>
+        <div>
+          <label for="oriCompanyname">Company name (ori)</label>
+          <input id="oriCompanyname" name="oriCompanyname" placeholder="Fontera" />
+        </div>
+        <div>
+          <label for="oriAddr1">Address line 1 (Ori)</label>
+          <input id="oriAddr1" name="oriAddr1" placeholder="City / Region" />
+        </div>
+        <div>
+<div>
+          <label for="oriAddr2">Address line 2 (Ori)</label>
+          <input id="oriAddr2" name="oriAddr2" placeholder="City / Region" />
+        </div>
+        <div>
+
+          <label for="oriPostalcode">Postal Code (Ori)</label>
+          <input id="oriPostalcode" name="oriPostalcode" type="Postalcode" placeholder="eg. 20270" />
+        </div>
+        <div>
+          <label for="oriRegno">Reg.No (Ori)</label>
+          <input id="oriRegno" name="oriRegno" placeholder="3457827354" pattern="^(\+?\d[\d\s\-]{6,})$" />
+          <div class="hint">Optional; leave empty if not provided.</div>
+        </div>
+      </div>
+    </section>
+          
+    <!-- 4. Transshipment Details -->
+<section id="transshipment">
+  <h2>Transshipment details</h2>
+  <div class="grid-2">
+    <div>
+      <label for="embarkation">Place of embarkation</label>
+      <input id="embarkation" name="embarkation" required placeholder="e.g., Sydney Port" />
+    </div>
+    <div>
+      <label for="disembarkation">Place of disembarkation</label>
+      <input id="disembarkation" name="disembarkation" required placeholder="e.g., Colombo Port" />
+    </div>
+    <div>
+      <label for="exportDate">Expected date of export</label>
+      <input id="exportDate" name="exportDate" type="date" required />
+    </div>
+    <div>
+      <label for="arrivalDate">Expected date of arrival</label>
+      <input id="arrivalDate" name="arrivalDate" type="date" required />
+    </div>
+    <div>
+      <label for="mode">Mode of transshipment</label>
+      <select id="mode" name="mode" required>
+        <option value="">Select mode</option>
+        <option value="air">Air</option>
+        <option value="ship">Ship</option>
+      </select>
+    </div>
+    <div>
+      <label for="transportNumber">Flight/Ship number</label>
+      <input id="transportNumber" name="transportNumber" placeholder="e.g., UL 123 / MSC Aurora" />
+    </div>
+    <div>
+      <label for="route">Detailed route to Sri Lanka</label>
+      <textarea id="route" name="route" rows="3" placeholder="List ports/airports in order..."></textarea>
+    </div>
+    <div>
+      <label for="processing">Any processing/unloading</label>
+      <select id="processing" name="processing" required>
+        <option value="">Select option</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+    </div>
+  </div>
+</section>
+
+   
+
+<!-- 6. Meat Products Table -->
+<section id="meat">
+  <h2>Meat products details table</h2>
+
+  <table id="meatTable">
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Meat type</th>
+        <th>Product name</th>
+        <th>Product description</th>
+        <th>Unit weight</th>
+        <th>Qty.</th>
+        <th>Total weight (kg)</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Dynamic rows will be added here -->
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="6" style="text-align:right;font-weight:bold;">Grand total (kg)</td>
+        <td id="grandTotal">0</td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <div class="row" style="margin-top:10px;">
+    <button class="btn" type="button" id="addMeatRow">Add row</button>
+    <button class="btn btn-danger" type="button" id="clearMeatRows">Clear rows</button>
+  </div>
+</section>
+
+<script>
+  const meatTBody = document.querySelector("#meatTable tbody");
+  const grandTotalCell = document.querySelector("#grandTotal");
+
+  function renumberRows() {
+    [...meatTBody.querySelectorAll("tr")].forEach((tr, i) => {
+      tr.querySelector(".row-num").textContent = i + 1;
+    });
+  }
+
+  function toKg(value, unit) {
+    const v = parseFloat(value) || 0;
+    switch (unit) {
+      case "g": return v / 1000;   // grams to kg
+      case "t": return v * 1000;   // tons to kg
+      default: return v;           // already kg
+    }
+  }
+
+  function updateTotals() {
+    let grand = 0;
+    meatTBody.querySelectorAll("tr").forEach(tr => {
+      const unitVal = tr.querySelector('input[name="unitWeight"]').value;
+      const unitType = tr.querySelector('select[name="unitType"]').value;
+      const qty = parseInt(tr.querySelector('input[name="qty"]').value) || 0;
+
+      const totalKg = toKg(unitVal, unitType) * qty;
+      tr.querySelector(".total-weight").textContent = totalKg.toFixed(2);
+      grand += totalKg;
+    });
+    grandTotalCell.textContent = grand.toFixed(2);
+  }
+
+  function createRow() {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="row-num"></td>
+      <td>
+        <select name="meatType">
+          <option value="">Select</option>
+          <option value="Processed">Processed</option>
+          <option value="Unprocessed">Unprocessed</option>
+        </select>
+      </td>
+      <td><input name="productName" placeholder="e.g., Chicken Breast" /></td>
+      <td><input name="productDesc" placeholder="Description" /></td>
+      <td>
+        <div style="display:flex; gap:4px; align-items:center;">
+          <input type="number" name="unitWeight" step="0.01" min="0" value="0" style="width:80px;" />
+          <select name="unitType">
+            <option value="kg">kg</option>
+            <option value="g">g</option>
+            <option value="t">ton</option>
+          </select>
+        </div>
+      </td>
+      <td><input type="number" name="qty" min="0" value="0" /></td>
+      <td class="total-weight">0</td>
+      <td><button type="button" class="btn btn-danger remove">Remove</button></td>
+    `;
+
+    tr.querySelectorAll('input[name="unitWeight"], input[name="qty"], select[name="unitType"]').forEach(inp => {
+      inp.addEventListener("input", updateTotals);
+      inp.addEventListener("change", updateTotals);
+    });
+
+    tr.querySelector(".remove").addEventListener("click", () => {
+      tr.remove();
+      renumberRows();
+      updateTotals();
+    });
+
+    return tr;
+  }
+
+  document.querySelector("#addMeatRow").addEventListener("click", () => {
+    meatTBody.appendChild(createRow());
+    renumberRows();
+  });
+
+  document.querySelector("#clearMeatRows").addEventListener("click", () => {
+    meatTBody.innerHTML = "";
+    updateTotals();
+  });
+
+  // Start with one row
+  document.querySelector("#addMeatRow").click();
+</script>
+
+    <!-- 7. Summary & Submit -->
+    <section id="summary">
+      <h2>Summary & submit</h2>
+      <div id="summaryBox" class="hint">Fill out sections above, then generate a summary preview.</div>
+      <div class="row" style="margin-top:10px;">
+        <button class="btn btn-primary" type="button" id="generateSummary">Generate summary preview</button>
+        <button class="btn btn-success" type="button" id="submitAll">Submit</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // --- Configuration ---
+    const MEAT_TYPES = [
+      "Beef", "Chicken", "Pork", "Mutton", "Turkey", "Seafood"
+    ];
+    const DEFAULT_STATUS = { unprocessed: "Pending", processed: "Completed" };
+
+    // --- Utilities ---
+    const $ = (sel, ctx = document) => ctx.querySelector(sel);
+    const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
+
+    function formatKg(n) {
+      const x = Number(n || 0);
+      return (isFinite(x) ? Math.max(0, x) : 0).toFixed(2);
+    }
+
+    function updateGrandTotals() {
+      // Un/Processed totals
+      const unRows = $$("#unprocessedTable tbody tr");
+      const unTotal = unRows.reduce((sum, tr) => sum + Number(tr.querySelector('input[name="weight"]').value || 0), 0);
+      $("#unprocessedTotal").textContent = formatKg(unTotal);
+
+      const pRows = $$("#processedTable tbody tr");
+      const pTotal = pRows.reduce((sum, tr) => sum + Number(tr.querySelector('input[name="weight"]').value || 0), 0);
+      $("#processedTotal").textContent = formatKg(pTotal);
+
+      // Meat table totals: sum weight column and total weight column
+      const mRows = $$("#meatTable tbody tr");
+      const meatWeightSum = mRows.reduce((sum, tr) => sum + Number(tr.querySelector('input[name="meatWeight"]').value || 0), 0);
+      $("#meatWeightTotal").textContent = formatKg(meatWeightSum);
+
+      const meatTotalSum = mRows.reduce((sum, tr) => sum + Number(tr.querySelector('input[name="meatTotal"]').value || 0), 0);
+      $("#meatTotalCol").textContent = formatKg(meatTotalSum);
+    }
+
+    function renumberRows(tbody) {
+      $$("#:scope > tr", tbody).forEach((tr, idx) => {
+        const cell = tr.querySelector(".row-num");
+        if (cell) cell.textContent = String(idx + 1);
+      });
+    }
+
+    // --- Tabs logic for Main type of work ---
+    const tabs = $$(".tab");
+    const panels = $$("#workPanels .panel");
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        tabs.forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+        const id = tab.dataset.tab;
+        panels.forEach(p => {
+          p.hidden = p.dataset.panel !== id;
+        });
+      });
+    });
+
+    // --- Populate meat type dropdown ---
+    const meatTypeGlobal = $("#meatTypeGlobal");
+    MEAT_TYPES.forEach(t => {
+      const opt = document.createElement("option");
+      opt.value = t; opt.textContent = t;
+      meatTypeGlobal.appendChild(opt);
+    });
+
+    // --- Unprocessed / Processed tables ---
+    const unprocessedTBody = $("#unprocessedTable tbody");
+    const processedTBody = $("#processedTable tbody");
+
+    function createWorkRow(defaultStatus = "Pending") {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="row-num"></td>
+        <td><input name="item" placeholder="Item name" /></td>
+        <td><input name="desc" placeholder="Description" /></td>
+        <td>
+          <select name="status">
+            <option ${defaultStatus === "Pending" ? "selected" : ""}>Pending</option>
+            <option ${defaultStatus === "Completed" ? "selected" : ""}>Completed</option>
+            <option>On Hold</option>
+          </select>
+        </td>
+        <td><input name="weight" type="number" min="0" step="0.01" value="0" /></td>
+        <td>
+          <button class="btn btn-ghost move">Move</button>
+          <button class="btn btn-danger remove">Remove</button>
+        </td>
+      `;
+
+      tr.querySelector('input[name="weight"]').addEventListener("input", updateGrandTotals);
+      tr.querySelector(".remove").addEventListener("click", () => {
+        tr.remove(); renumberRows(tr.closest("tbody")); updateGrandTotals();
+      });
+      tr.querySelector(".move").addEventListener("click", () => {
+        const from = tr.closest("table").id.includes("unprocessed") ? unprocessedTBody : processedTBody;
+        const to = from === unprocessedTBody ? processedTBody : unprocessedTBody;
+        to.appendChild(tr);
+        renumberRows(unprocessedTBody);
+        renumberRows(processedTBody);
+        updateGrandTotals();
+      });
+
+      return tr;
+    }
+
+    $("#addUnprocessedRow").addEventListener("click", () => {
+      const tr = createWorkRow(DEFAULT_STATUS.unprocessed);
+      unprocessedTBody.appendChild(tr);
+      renumberRows(unprocessedTBody);
+      updateGrandTotals();
+    });
+
+    $("#applyProcessing").addEventListener("click", () => {
+      // Move all Unprocessed to Processed and set status Completed
+      $$("#unprocessedTable tbody tr").forEach(tr => {
+        const status = tr.querySelector('select[name="status"]');
+        status.value = "Completed";
+        processedTBody.appendChild(tr);
+      });
+      renumberRows(unprocessedTBody);
+      renumberRows(processedTBody);
+      updateGrandTotals();
+    });
+
+    $("#clearUnprocessed").addEventListener("click", () => {
+      unprocessedTBody.innerHTML = "";
+      updateGrandTotals();
+    });
+    $("#clearProcessed").addEventListener("click", () => {
+      processedTBody.innerHTML = "";
+      updateGrandTotals();
+    });
+
+    // Seed one sample row
+    $("#addUnprocessedRow").click();
+
+    // --- Multiple IDs ---
+    $("#generateIds").addEventListener("click", () => {
+      const base = $("#shipmentIds").value
+        .split(",")
+        .map(s => s.trim())
+        .filter(Boolean);
+      const mode = $("#idMode").value;
+      const ts = new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0,14);
+      const out = base.length ? base : ["IMP-001","EXP-001"];
+      const generated = out.map(id => mode === "auto" ? `${id}-${ts}` : id);
+      $("#idsPreview").textContent = `IDs: ${generated.join(", ")}`;
+    });
+
+    // --- Meat table ---
+    const meatTBody = $("#meatTable tbody");
+
+    function createMeatRow() {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="row-num"></td>
+        <td>
+          <select name="meatType" class="meat-type"></select>
+        </td>
+        <td>
+          <input name="meatDesc" placeholder="Cut / grade / packaging" />
+        </td>
+        <td>
+          <input name="meatWeight" type="number" min="0" step="0.01" value="0" />
+        </td>
+        <td>
+          <input name="meatTotal" type="number" min="0" step="0.01" value="0" />
+        </td>
+        <td>
+          <button class="btn btn-ghost dup">Duplicate</button>
+          <button class="btn btn-danger remove">Remove</button>
+        </td>
+      `;
+
+      // populate meat types
+      const select = tr.querySelector(".meat-type");
+      select.appendChild(new Option("", ""));
+      MEAT_TYPES.forEach(t => select.appendChild(new Option(t, t)));
+
+      const weight = tr.querySelector('input[name="meatWeight"]');
+      const total = tr.querySelector('input[name="meatTotal"]');
+      weight.addEventListener("input", updateGrandTotals);
+      total.addEventListener("input", updateGrandTotals);
+
+      tr.querySelector(".remove").addEventListener("click", () => {
+        tr.remove(); renumberRows(meatTBody); updateGrandTotals();
+      });
+      tr.querySelector(".dup").addEventListener("click", () => {
+        const clone = createMeatRow();
+        clone.querySelector(".meat-type").value = select.value;
+        clone.querySelector('input[name="meatDesc"]').value = tr.querySelector('input[name="meatDesc"]').value;
+        clone.querySelector('input[name="meatWeight"]').value = tr.querySelector('input[name="meatWeight"]').value;
+        clone.querySelector('input[name="meatTotal"]').value = tr.querySelector('input[name="meatTotal"]').value;
+        meatTBody.appendChild(clone);
+        renumberRows(meatTBody);
+        updateGrandTotals();
+      });
+
+      return tr;
+    }
+
+    $("#addMeatRow").addEventListener("click", () => {
+      meatTBody.appendChild(createMeatRow());
+      renumberRows(meatTBody);
+      updateGrandTotals();
+    });
+    $("#clearMeatRows").addEventListener("click", () => {
+      meatTBody.innerHTML = "";
+      updateGrandTotals();
+    });
+
+    // Seed two rows
+    $("#addMeatRow").click();
+    $("#addMeatRow").click();
+
+    // Apply global type to all rows
+    $("#applyGlobalType").addEventListener("click", () => {
+      const val = $("#meatTypeGlobal").value;
+      if (!val) return;
+      $$('#meatTable .meat-type').forEach(s => s.value = val);
+    });
+
+    // Breakdown radio (Processed/Unprocessed) influences default status in work table
+    $$('input[name="breakdownMode"]').forEach(r => {
+      r.addEventListener("change", e => {
+        const mode = e.target.value; // processed | unprocessed
+        const defaultStatus = DEFAULT_STATUS[mode];
+        // When mode changes, future added rows in Unprocessed table use default status
+        // We keep current rows untouched.
+        $("#addUnprocessedRow").onclick = () => {
+          const tr = createWorkRow(defaultStatus);
+          unprocessedTBody.appendChild(tr);
+          renumberRows(unprocessedTBody);
+          updateGrandTotals();
+        };
+      });
+    });
+
+    // --- Assign new company tags ---
+    function addTempCompanyTag(which) {
+      const container = which === "imp" ? $("#importer") : $("#exporter");
+      const companyInput = which === "imp" ? $("#impCompany") : $("#expCompany");
+      const tag = document.createElement("div");
+      tag.className = "pill";
+      const stamp = new Date().toISOString().slice(0,19).replace("T"," ");
+      tag.textContent = `Temp: ${companyInput.value || "Unnamed"} • ${stamp}`;
+      container.appendChild(tag);
+    }
+    $("#assignImpCompany").addEventListener("click", () => addTempCompanyTag("imp"));
+    $("#assignExpCompany").addEventListener("click", () => addTempCompanyTag("exp"));
+
+    // --- Summary & submit ---
+    $("#generateSummary").addEventListener("click", () => {
+      const imp = {
+        company: $("#impCompany").value, phone: $("#impPhone").value,
+        addr1: $("#impAddr1").value, addr2: $("#impAddr2").value, email: $("#impEmail").value,
+        combos: $("#impCombos").value, arrival1: $("#impArrival1").value,
+        arrival2: $("#impArrival2").value, port: $("#impPort").value
+      };
+      const exp = {
+        company: $("#expCompany").value, phone: $("#expPhone").value,
+        addr1: $("#expAddr1").value, addr2: $("#expAddr2").value, email: $("#expEmail").value,
+        whatsapp: $("#expWhatsApp").value, combos: $("#expCombos").value,
+        arrival: $("#expArrival").value, port: $("#expPort").value
+      };
+      const ids = $("#idsPreview").textContent || "IDs: (none)";
+      const un = $$("#unprocessedTable tbody tr").map(tr => ({
+        item: tr.querySelector('input[name="item"]').value,
+        desc: tr.querySelector('input[name="desc"]').value,
+        status: tr.querySelector('select[name="status"]').value,
+        weight: tr.querySelector('input[name="weight"]').value
+      }));
+      const pr = $$("#processedTable tbody tr").map(tr => ({
+        item: tr.querySelector('input[name="item"]').value,
+        desc: tr.querySelector('input[name="desc"]').value,
+        status: tr.querySelector('select[name="status"]').value,
+        weight: tr.querySelector('input[name="weight"]').value
+      }));
+      const meats = $$("#meatTable tbody tr").map(tr => ({
+        type: tr.querySelector('.meat-type').value,
+        desc: tr.querySelector('input[name="meatDesc"]').value,
+        weight: tr.querySelector('input[name="meatWeight"]').value,
+        total: tr.querySelector('input[name="meatTotal"]').value
+      }));
+
+      const summary = [
+        `Importer: ${imp.company} • ${imp.phone} • ${imp.email}`,
+        `Importer Addr: ${imp.addr1} | ${imp.addr2}`,
+        `Importer Props: combos=${imp.combos}, arrival1=${imp.arrival1}, arrival2=${imp.arrival2}, port=${imp.port}`,
+        `Exporter: ${exp.company} • ${exp.phone} • WA ${exp.whatsapp} • ${exp.email}`,
+        `Exporter Addr: ${exp.addr1} | ${exp.addr2}`,
+        `Exporter Props: combos=${exp.combos}, arrival=${exp.arrival}, port=${exp.port}`,
+        ids,
+        `Unprocessed items: ${un.length}, total kg: ${$("#unprocessedTotal").textContent}`,
+        `Processed items: ${pr.length}, total kg: ${$("#processedTotal").textContent}`,
+        `Meat rows: ${meats.length}, weight sum: ${$("#meatWeightTotal").textContent}, total sum: ${$("#meatTotalCol").textContent}`
+      ].join("\n");
+
+      $("#summaryBox").textContent = summary;
+    });
+
+    $("#submitAll").addEventListener("click", () => {
+      // Placeholder submit; replace with fetch() or FormData to your backend/Apps Script
+      alert("Submitted! (Demo) Integrate with Google Apps Script or backend to store responses.");
+    });
+  </script>
+</body>
+</html>
