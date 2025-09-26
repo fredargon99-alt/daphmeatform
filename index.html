@@ -314,6 +314,7 @@ and Edible Offal</strong>
 </section>
 
 <script>
+  // Declare once only
   const meatTBody = document.querySelector("#meatTable tbody");
   const grandTotalCell = document.querySelector("#grandTotal");
 
@@ -323,11 +324,12 @@ and Edible Offal</strong>
     });
   }
 
+  // Convert entered unit to kg
   function toKg(value, unit) {
     const v = parseFloat(value) || 0;
     switch (unit) {
-      case "g": return v / 1000;   // grams to kg
-      case "t": return v * 1000;   // tons to kg
+      case "g": return v / 1000;   // grams → kg
+      case "t": return v * 1000;   // tons → kg
       default: return v;           // already kg
     }
   }
@@ -374,6 +376,7 @@ and Edible Offal</strong>
       <td><button type="button" class="btn btn-danger remove">Remove</button></td>
     `;
 
+    // Hook up events
     tr.querySelectorAll('input[name="unitWeight"], input[name="qty"], select[name="unitType"]').forEach(inp => {
       inp.addEventListener("input", updateTotals);
       inp.addEventListener("change", updateTotals);
