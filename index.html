@@ -769,7 +769,7 @@ and Edible Offal</strong>
     const payload = { importer, exporter, transshipment, meatProducts };
 
     // Send to Apps Script Web App
-    fetch("YOUR_WEB_APP_URL_HERE", {
+    fetch("https://script.google.com/macros/s/AKfycbzSTeFjRYBw3kezWH5GwJG15d_VvFndVAVknP8JGtqfTvRC0wl1gBUsdIIxMQF6jxPy/exec", {
       method: "POST",
       body: JSON.stringify(payload),
       headers: { "Content-Type": "application/json" }
@@ -785,7 +785,5 @@ and Edible Offal</strong>
     .catch(err => alert("Network error: " + err));
   });
 </script>
-  
 </body>
-
 </html>
